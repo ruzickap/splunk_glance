@@ -4,11 +4,68 @@
 %BOOK_ENTITIES;
 ]>
 <article>
-	<xi:include href="Article_Info.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<para>
-		This is a test paragraph
-	</para>
-	<xi:include href="Revision_History.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<index />
+  <xi:include href="Article_Info.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+  <section id="s1-reference-architecture-configuration">
+    <title>Reference Architecture Configuration</title>
+    <para>
+      xxxx
+    </para>
+    <section id="s2-environment">
+      <title>Environment</title>
+      <para>
+        xxxx
+      </para>
+    </section>
+  </section>
+
+  <section id="s1-software_configuration">
+    <title>Software Configuration</title>
+    <para>
+      xxxx
+    </para>
+    <section id="s2-operating_systems">
+      <title>Operating Systems</title>
+      <para>
+        xxxx
+      </para>
+    </section>
+    <section id="s2-applications_tools_and_packages">
+      <title>Applications, Tools and Packages</title>
+      <para>
+        xxxx
+      </para>
+    </section>
+  </section>
+
+  <section id="s1-hardware_configuration">
+    <title>Hardware Configuration</title>
+    <para>
+      xxxx
+    </para>
+    <section id="s2-servers">
+      <title>Servers</title>
+      <para>
+        Indexers: 2x quad-core Xeon, 3GHz, 8GB RAM, RAID 1+0 or 0, with a 64 bit OS installed.
+        Forwarders:  Dual Core 1.5Ghz+ processor, 1GB+ RAM
+      </para>
+    </section>
+    <section id="s2-storage">
+      <title>Storage</title>
+      <para>
+        xxxx
+      </para>
+    </section>
+  </section>
+
+  <section id="s1-tuning_optimizations">
+    <title>Tuning and Optimizations</title>
+    <para>
+      xxxx
+    </para>
+  </section>
+
+  <xi:include href="Revision_History.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <index />
 </article>
 

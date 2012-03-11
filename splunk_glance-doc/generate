@@ -1,1 +1,2 @@
-publican build --formats=html-single,pdf,html-desktop --langs en-US
+publican build --formats=html-single,pdf,html-desktop --langs en-US && \
+okular ./tmp/en-US/pdf/Splunk_and_Glance-0.1-Splunk_and_Glance_integration-en-US.pdf
