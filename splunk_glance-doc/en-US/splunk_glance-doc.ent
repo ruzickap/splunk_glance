@@ -1,0 +1,4 @@
+<!ENTITY PRODUCT "Documentation">
+<!ENTITY BOOKID "splunk_glance-doc">
+<!ENTITY YEAR "2012">
+<!ENTITY HOLDER "| You need to change the HOLDER entity in the en-US/splunk_glance-doc.ent file |">
