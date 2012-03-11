@@ -1,0 +1,68 @@
+install 
+#url --url=http://ftp.sh.cvut.cz/MIRRORS/centos/6.2/os/x86_64/
+url --url=http://192.168.100.1/ks/CentOS-6.2-x86_64-bin-DVD1/
+text
+network --bootproto static --device=eth0 --ip=192.168.100.200 --netmask=255.255.255.0 --gateway=192.168.100.1 --nameserver=192.168.100.1
+lang en_US
+keyboard us
+zerombr
+clearpart --all
+bootloader --location mbr
+timezone --utc Europe/Prague
+auth --enablemd5 --enableshadow
+rootpw xxxx
+selinux --permissive
+reboot
+firewall --disabled
+skipx
+part /boot --fstype=ext3 --size=100
+part pv.01 --size=1 --grow
+volgroup VolGroup00 pv.01
+logvol swap --name=LogVol01 --vgname=VolGroup00 --size=640
+logvol / --vgname=VolGroup00 --name=LogVol00 --size=1 --grow --percent=90
+user --name=pruzicka --password=xxxx
+sshpw --username=root xxxx --plaintext
+reboot
+
+%packages
+@Base
+@E-mail server
+lftp
+mc
+net-snmp
+net-snmp-utils
+ntp
+strace
+sysstat
+yum-utils
+%end
+
+%pre
+set -x -v
+wget -P /tmp/ http://192.168.100.1/ks/splunk_glance/ks_common_post.sh
+%end
+
+%post
+chvt 3
+exec < /dev/tty3 > /dev/tty3 2>&1
+
+(
+set -x -v
+
+HOSTNAME="centos6-glance.example.com"
+%include /tmp/ks_common_post.sh
+
+## EPEL
+rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm
+
+## Glance
+yum install openstack-glance -y
+chkconfig openstack-glance-api on
+chkconfig openstack-glance-registry on
+
+) 2>&1 | tee -a /root/ks-post.log
+
+# Return to default installation tty.
+chvt 1
+exec < /dev/tty1 > /dev/tty1
+%end
