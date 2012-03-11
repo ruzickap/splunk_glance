@@ -1,0 +1,1 @@
+publican build --formats=html-single,pdf,html-desktop --langs en-US
