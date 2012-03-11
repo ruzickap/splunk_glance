@@ -4,9 +4,9 @@
 %BOOK_ENTITIES;
 ]>
 <articleinfo id="arti-splunk_glance-doc-splunk_glance_doc">
-	<title>splunk glance-doc</title>
-	<subtitle>short description</subtitle>
-	<productname>Documentation</productname>
+	<title>Splunk and Glance integration</title>
+	<subtitle>How to integrate Glance logs with Splunk to use queries in Splunk Web UI.</subtitle>
+	<productname>Splunk and Glance</productname>
 	<productnumber>0.1</productnumber>
 	<edition>0</edition>
 	<pubsnumber>0</pubsnumber>
