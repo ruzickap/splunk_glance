@@ -71,7 +71,7 @@ EOF
 
 
 ## Glance
-yum install openstack-glance -y
+yum install openstack-glance python-argparse -y
 chkconfig openstack-glance-api on
 chkconfig openstack-glance-registry on
 sed -i.orig 's/^use_syslog = False/use_syslog = True/;s/^verbose = True/verbose = False/' /etc/glance/glance-*.conf
