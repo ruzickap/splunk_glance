@@ -62,9 +62,9 @@ rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noar
 #http://www.rsyslog.com/doc/rsconf1_actionexeconlywhenpreviousissuspended.html
 cat >> /etc/rsyslog.conf << \EOF
 
-*.* @@192.168.200.205
+*.* @@192.168.100.205
 $ActionExecOnlyWhenPreviousIsSuspended on
-& @@192.168.200.210
+& @@192.168.100.210
 & /var/log/localbuffer
 $ActionExecOnlyWhenPreviousIsSuspended off
 EOF

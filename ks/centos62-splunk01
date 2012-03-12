@@ -55,10 +55,15 @@ HOSTNAME="centos6-splunk01.example.com"
 
 
 ## Splunk
-rpm -Uvh http://192.168.100.205/ks/splunk-4.3.1-119532-linux-2.6-x86_64.rpm
-splunk start --accept-license
-splunk enable boot-start
+rpm -Uvh http://192.168.100.1/ks/splunk-4.3.1-119532-linux-2.6-x86_64.rpm
+useradd splunk
+/opt/splunk/bin/splunk start --accept-license
+/opt/splunk/bin/splunk enable boot-start
 
+#/opt/splunk/bin/splunk add tcp 514 -sourcetype syslog 
+
+#Enable SSL
+sed -i.orig 's/^enableSplunkWebSSL = false/enableSplunkWebSSL = true/'
 
 ) 2>&1 | tee -a /root/ks-post.log
 
