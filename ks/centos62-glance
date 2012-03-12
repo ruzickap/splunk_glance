@@ -3,6 +3,7 @@ install
 url --url=http://192.168.100.1/ks/CentOS-6.2-x86_64-bin-DVD1/
 text
 network --bootproto static --device=eth0 --ip=192.168.100.200 --netmask=255.255.255.0 --gateway=192.168.100.1 --nameserver=192.168.100.1
+network --device=eth1 --onboot=yes
 lang en_US
 keyboard us
 zerombr
@@ -60,6 +61,7 @@ rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noar
 ## rsyslog failover + transfer all to remote servers using TCP
 #http://www.rsyslog.com/doc/rsconf1_actionexeconlywhenpreviousissuspended.html
 cat >> /etc/rsyslog.conf << \EOF
+
 *.* @@192.168.200.205
 $ActionExecOnlyWhenPreviousIsSuspended on
 & @@192.168.200.210
@@ -75,6 +77,7 @@ chkconfig openstack-glance-registry on
 sed -i.orig 's/^use_syslog = False/use_syslog = True/' /etc/glance/glance-*.conf
 
 wget -P /tmp/ http://192.168.100.1/ks/splunk_glance/scripts/glance_log_tests.sh
+chmod a+x /tmp/glance_log_tests.sh
 
 ) 2>&1 | tee -a /root/ks-post.log
 

@@ -30,6 +30,30 @@ echo "NOZEROCONF=yes" >> /etc/sysconfig/network
 
 
 #############################
+# Bonding
+#############################
+chkconfig NetworkManager off
+echo "alias bond0 bonding" > /etc/modprobe.d/bonding.conf
+grep -E '(^BOOTPROTO|^DNS1|^GATEWAY|^IPADDR|^NETMASK|^ONBOOT)' /etc/sysconfig/network-scripts/ifcfg-eth0 > /etc/sysconfig/network-scripts/ifcfg-bond0
+cat >> /etc/sysconfig/network-scripts/ifcfg-bond0 << EOF
+DEVICE=bond0
+USERCTL=no
+BONDING_OPTS="mode=1 miimon=100"
+EOF
+
+for INTERFACE in eth0 eth1; do 
+  grep -E '(^DEVICE|^ONBOOT|^HWADDR)' /etc/sysconfig/network-scripts/ifcfg-${INTERFACE} > /etc/sysconfig/network-scripts/ifcfg-${INTERFACE}.tmp
+  cat >> /etc/sysconfig/network-scripts/ifcfg-${INTERFACE}.tmp << EOF
+BOOTPROTO=none
+MASTER=bond0
+SLAVE=yes
+USERCTL=no
+EOF
+  mv /etc/sysconfig/network-scripts/ifcfg-${INTERFACE}.tmp /etc/sysconfig/network-scripts/ifcfg-${INTERFACE}
+done
+
+
+#############################
 # gruub.conf 
 #############################
 sed -i.orig 's/^timeout=.*/timeout=1/;s/^hiddenmenu/#hiddenmenu/;s/^\(splashimage=.*\)/#\1/;s/quiet//;s/rhgb//' /boot/grub/grub.conf
