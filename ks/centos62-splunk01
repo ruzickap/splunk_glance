@@ -2,7 +2,7 @@ install
 #url --url=http://ftp.sh.cvut.cz/MIRRORS/centos/6.2/os/x86_64/
 url --url=http://192.168.100.1/ks/CentOS-6.2-x86_64-bin-DVD1/
 text
-network --bootproto static --device=eth0 --ip=192.168.100.200 --netmask=255.255.255.0 --gateway=192.168.100.1 --nameserver=192.168.100.1
+network --bootproto static --device=eth0 --ip=192.168.100.205 --netmask=255.255.255.0 --gateway=192.168.100.1 --nameserver=192.168.100.1
 network --device=eth1 --onboot=yes
 lang en_US
 keyboard us
@@ -50,34 +50,15 @@ exec < /dev/tty3 > /dev/tty3 2>&1
 (
 set -x -v
 
-HOSTNAME="centos6-glance.example.com"
+HOSTNAME="centos6-splunk01.example.com"
 %include /tmp/ks_common_post.sh
 
 
-## EPEL
-rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm
+## Splunk
+rpm -Uvh http://192.168.100.205/ks/splunk-4.3.1-119532-linux-2.6-x86_64.rpm
+splunk start --accept-license
+splunk enable boot-start
 
-
-## rsyslog failover + transfer all to remote servers using TCP
-#http://www.rsyslog.com/doc/rsconf1_actionexeconlywhenpreviousissuspended.html
-cat >> /etc/rsyslog.conf << \EOF
-
-*.* @@192.168.200.205
-$ActionExecOnlyWhenPreviousIsSuspended on
-& @@192.168.200.210
-& /var/log/localbuffer
-$ActionExecOnlyWhenPreviousIsSuspended off
-EOF
-
-
-## Glance
-yum install openstack-glance -y
-chkconfig openstack-glance-api on
-chkconfig openstack-glance-registry on
-sed -i.orig 's/^use_syslog = False/use_syslog = True/;s/^verbose = True/verbose = False/' /etc/glance/glance-*.conf
-
-wget -P /tmp/ http://192.168.100.1/ks/splunk_glance/scripts/glance_log_tests.sh
-chmod a+x /tmp/glance_log_tests.sh
 
 ) 2>&1 | tee -a /root/ks-post.log
 
