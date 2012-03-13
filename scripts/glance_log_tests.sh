@@ -10,6 +10,7 @@ fi
 
 (
 set -x
+COUNTER=0
 for IMAGE in /var/tmp/isos/CentOS-6.2-x86_64-netinstall.iso /var/tmp/isos/debian_lenny_amd64_standard.qcow2; do
   for I in `seq -s " " 10`; do
     COUNTER=$((COUNTER+1))
