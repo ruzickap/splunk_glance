@@ -1,8 +1,8 @@
 install 
 #url --url=http://ftp.sh.cvut.cz/MIRRORS/centos/6.2/os/x86_64/
-url --url=http://192.168.100.1/ks/CentOS-6.2-x86_64-bin-DVD1/
+url --url=http://192.168.122.1/ks/CentOS-6.2-x86_64-bin-DVD1/
 text
-network --bootproto static --device=eth0 --ip=192.168.100.205 --netmask=255.255.255.0 --gateway=192.168.100.1 --nameserver=192.168.100.1
+network --bootproto static --device=eth0 --ip=192.168.122.205 --netmask=255.255.255.0 --gateway=192.168.122.1 --nameserver=192.168.122.1
 network --device=eth1 --onboot=yes
 lang en_US
 keyboard us
@@ -40,7 +40,7 @@ yum-utils
 
 %pre
 set -x -v
-wget -P /tmp/ http://192.168.100.1/ks/splunk_glance/ks/ks_common_post.sh
+wget -P /tmp/ http://192.168.122.1/ks/splunk_glance/ks/ks_common_post.sh
 %end
 
 %post
@@ -55,7 +55,7 @@ HOSTNAME="centos6-splunk.example.com"
 
 
 ## Splunk
-rpm -Uvh http://192.168.100.1/ks/splunk-4.3.1-119532-linux-2.6-x86_64.rpm
+rpm -Uvh http://192.168.122.1/ks/splunk-4.3.1-119532-linux-2.6-x86_64.rpm
 useradd splunk
 /opt/splunk/bin/splunk start --accept-license
 /opt/splunk/bin/splunk enable boot-start

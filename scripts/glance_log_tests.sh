@@ -3,9 +3,9 @@
 if [ ! -d /var/tmp/isos ]; then
   mkdir /var/tmp/isos
   #wget http://ftp.sh.cvut.cz/MIRRORS/centos/6.2/isos/x86_64/CentOS-6.2-x86_64-netinstall.iso
-  wget -P /var/tmp/isos/ http://192.168.100.1/ks/CentOS-6.2-x86_64-netinstall.iso
+  wget -P /var/tmp/isos/ http://192.168.122.1/ks/CentOS-6.2-x86_64-netinstall.iso
   #wget http://people.debian.org/~aurel32/qemu/amd64/debian_lenny_amd64_standard.qcow2
-  wget -P /var/tmp/isos/ http://192.168.100.1/ks/debian_lenny_amd64_standard.qcow2
+  wget -P /var/tmp/isos/ http://192.168.122.1/ks/debian_lenny_amd64_standard.qcow2
 fi
 
 (
