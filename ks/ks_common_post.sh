@@ -54,7 +54,7 @@ done
 
 
 #############################
-# gruub.conf 
+# grub.conf 
 #############################
 sed -i.orig 's/^timeout=.*/timeout=1/;s/^hiddenmenu/#hiddenmenu/;s/^\(splashimage=.*\)/#\1/;s/quiet//;s/rhgb//' /boot/grub/grub.conf
 
@@ -69,7 +69,7 @@ ntpdate clock.redhat.com
 
 
 #############################
-# kdump / diskdump
+# kdump
 #############################
 if rpm -q kexec-tools; then
   chkconfig kdump on

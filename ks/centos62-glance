@@ -64,10 +64,10 @@ rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noar
 cat >> /etc/rsyslog.conf << \EOF
 
 *.* @@192.168.122.205
-$ActionExecOnlyWhenPreviousIsSuspended on
-& @@192.168.122.210
-& /var/log/localbuffer
-$ActionExecOnlyWhenPreviousIsSuspended off
+#$ActionExecOnlyWhenPreviousIsSuspended on
+#& @@192.168.122.210
+#& /var/log/localbuffer
+#$ActionExecOnlyWhenPreviousIsSuspended off
 EOF
 
 
@@ -75,7 +75,7 @@ EOF
 yum install openstack-glance python-argparse -y
 chkconfig openstack-glance-api on
 chkconfig openstack-glance-registry on
-sed -i.orig 's/^use_syslog = False/use_syslog = True/;s/^verbose = True/verbose = False/' /etc/glance/glance-*.conf
+sed -i.orig 's/^use_syslog = False/use_syslog = True/' /etc/glance/glance-*.conf
 
 #http://raw.github.com/ruzickap/splunk_glance/master/scripts/glance_log_tests.sh
 wget -P /tmp/ http://192.168.122.1/ks/splunk_glance/scripts/glance_log_tests.sh
