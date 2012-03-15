@@ -2,4 +2,4 @@
 
 #html-single,pdf,html-desktop
 publican build --formats=pdf --langs en-US && \
-okular ./tmp/en-US/pdf/Splunk_and_Glance-0.1-Splunk_and_Glance_integration-en-US.pdf
+okular --page 7 ./tmp/en-US/pdf/Splunk_and_Glance-0.1-Splunk_and_Glance_integration-en-US.pdf
