@@ -1,6 +1,6 @@
 install 
-#url --url=http://ftp.sh.cvut.cz/MIRRORS/centos/6.2/os/x86_64/
-url --url=http://192.168.122.1/ks/CentOS-6.2-x86_64-bin-DVD1/
+url --url=http://ftp.sh.cvut.cz/MIRRORS/centos/6.2/os/x86_64/
+#url --url=http://192.168.122.1/ks/CentOS-6.2-x86_64-bin-DVD1/
 text
 network --bootproto static --device=eth0 --ip=192.168.122.200 --netmask=255.255.255.0 --gateway=192.168.122.1 --nameserver=192.168.122.1
 network --device=eth1 --onboot=yes
@@ -40,8 +40,8 @@ yum-utils
 
 %pre
 set -x -v
-#http://raw.github.com/ruzickap/splunk_glance/master/ks/ks_common_post.sh
-wget -P /tmp/ http://192.168.122.1/ks/splunk_glance/ks/ks_common_post.sh
+wget -P /tmp/ http://raw.github.com/ruzickap/splunk_glance/master/ks/ks_common_post.sh
+#wget -P /tmp/ http://192.168.122.1/ks/splunk_glance/ks/ks_common_post.sh
 %end
 
 %post
@@ -77,8 +77,8 @@ chkconfig openstack-glance-api on
 chkconfig openstack-glance-registry on
 sed -i.orig 's/^use_syslog = False/use_syslog = True/' /etc/glance/glance-*.conf
 
-#http://raw.github.com/ruzickap/splunk_glance/master/scripts/glance_log_tests.sh
-wget -P /tmp/ http://192.168.122.1/ks/splunk_glance/scripts/glance_log_tests.sh
+wget -P /tmp/ http://raw.github.com/ruzickap/splunk_glance/master/scripts/glance_log_tests.sh
+#wget -P /tmp/ http://192.168.122.1/ks/splunk_glance/scripts/glance_log_tests.sh
 chmod a+x /tmp/glance_log_tests.sh
 
 ) 2>&1 | tee -a /root/ks-post.log
