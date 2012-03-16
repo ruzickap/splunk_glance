@@ -13,6 +13,7 @@
       url="http://glance.openstack.org/"/>) and Splunk (<ulink
       url="http://www.splunk.com/"/>)
     </para>
+
     <itemizedlist>
       <listitem>
 	<para>
@@ -29,6 +30,7 @@
         </para>
       </listitem>
     </itemizedlist>
+
     <para>
       The goal of this document is to show possibilities how the logs generated
       by Glance can be transferred and indexed by Splunk. The suggested solution is
@@ -42,14 +44,15 @@
 
   <section id="s1-reference-architecture-configuration">
     <title>Reference Architecture Configuration</title>
-      <para>
-	For the simulations I decided to use free software as much as possible
-        and visualised hardware. It's not a priority right now to describe in details
-        which hardware is needed for real production, because this is suggestions how
-        the things can work. It's the same with software – for production server it's
-        better to buy supported OS from known vendors, but it depends how big the final
-        solution.
-      </para>
+    <para>
+      For the simulations I decided to use free software as much as possible
+      and visualised hardware. It's not a priority right now to describe in details
+      which hardware is needed for real production, because this is suggestions how
+      the things can work. It's the same with software – for production server it's
+      better to buy supported OS from known vendors, but it depends how big the final
+      solution.
+    </para>
+
     <section id="s3-software_configuration">
       <title>Software Configuration</title>
       <section id="s2-operating_systems">
@@ -70,28 +73,29 @@
           mentioned much more, but it's not necessary to list all the installed packages
           and their versions.
         </para>
+
         <table id="software_versions" frame='all'>
           <title>Software versions</title>
           <tgroup cols='2' align='center' colsep='1' rowsep='1'>
             <thead>
-                <row>
-                  <entry>Software</entry>
-                  <entry>Version</entry>
-                </row>
+              <row>
+                <entry>Software</entry>
+                <entry>Version</entry>
+              </row>
             </thead>
             <tbody>
-                <row>
-                  <entry>Splunk</entry>
-                  <entry><systemitem> 4.3.1-119532 </systemitem></entry>
-                </row>
-                <row>
-                  <entry>Glance</entry>
-                  <entry><systemitem>2011.3.1-3.el6</systemitem></entry>
-                </row>
-                <row>
-                  <entry>rsyslog</entry>
-                  <entry><systemitem>4.6.2-12.el6</systemitem></entry>
-                </row>
+              <row>
+                <entry>Splunk</entry>
+                <entry><systemitem> 4.3.1-119532 </systemitem></entry>
+              </row>
+              <row>
+                <entry>Glance</entry>
+                <entry><systemitem>2011.3.1-3.el6</systemitem></entry>
+              </row>
+              <row>
+                <entry>rsyslog</entry>
+                <entry><systemitem>4.6.2-12.el6</systemitem></entry>
+              </row>
             </tbody>
           </tgroup>
         </table>
@@ -100,9 +104,9 @@
 
     <section id="s3-hardware_configuration">
       <title>Hardware Configuration</title>
-	<para>There only hardware I used was my laptop with virtualization.
-          This was sufficient for the basics tests.
-        </para>
+      <para>There only hardware I used was my laptop with virtualization.
+        This was sufficient for the basics tests.
+      </para>
     </section>
   </section>
   <section id="s1-environment">
@@ -123,6 +127,7 @@
         network - so both virtual guests are connected <systemitem
         class="ipaddress">192.168.122.0/24</systemitem>.
       </para>
+
       <important>
 	<title>Important - Virtual servers must have two NICs interfaces</title>
 	<para>
@@ -130,6 +135,7 @@
           the same virtual network otherwise the installation will fail.
         </para>
       </important>
+
       <para>
 	I'm using the <systemitem>virbr0</systemitem> device which is the
         virtual bridge where <systemitem>vnet0</systemitem> is connected. This emulate
@@ -224,12 +230,13 @@
         <title>Network Topology</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="./images/network_topology.svg" format="SVG" width="450" />
+            <imagedata fileref="./images/network_topology.svg" format="SVG" width="450" align="center" />
           </imageobject>
         </mediaobject>
       </figure>
     </section>
   </section>
+
   <section id="s1-installation">
     <title>Installation</title>
     <para>
@@ -264,7 +271,7 @@
       <title>Menu from customized CentOS iso</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="./images/customized_centos_menu.png" format="PNG" width="400" />
+          <imagedata fileref="./images/customized_centos_menu.png" format="PNG" width="400" align="center" />
         </imageobject>
       </mediaobject>
     </figure>
@@ -286,9 +293,8 @@
 
       <para>
         The installation of the Splunk Virtual Machine is done using the
-        kickstart file
-        <ulink
-url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
+        kickstart file <ulink
+        url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
       </para>
 
       <section id="s3-splunk_installation_kickstart_section">
@@ -302,35 +308,35 @@ url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
         </para>
 
         <para>
-  	The second part contains the installation of basic packages and setting
+  	  The second part contains the installation of basic packages and setting
           the server defaults using <filename>ks_common_post.sh</filename>. This file is
           included in the main kickstart using <command>%include</command> and contains:
         </para>
 
         <itemizedlist>
           <listitem>
-  	  <para>
+  	    <para>
               <guilabel>SSH public key configuration</guilabel> &mdash; to login to the machine without entering password.
             </para>
           </listitem>
           <listitem>
-  	  <para>
+  	    <para>
               <guilabel>Network + Bonding configuration</guilabel>
             </para>
           </listitem>
           <listitem>
-  	  <para>
+  	    <para>
               <guilabel>NTP configuration</guilabel> &mdash; to have the same time on all servers.
             </para>
           </listitem>
           <listitem>
-  	  <para>
+  	    <para>
               <guilabel>Kdump configuration</guilabel> &mdash; used to generate vmcores, which can help to troubleshoot kernel issues.
             </para>
           </listitem>
           <listitem>
-  	  <para>
-  	    <guilabel>SNMP configuration</guilabel> &mdash; to get the data about
+  	    <para>
+  	      <guilabel>SNMP configuration</guilabel> &mdash; to get the data about
               cpu/memory/processes/traffic/disk IO, space from the machine out
               of the machine using the standard SNMP requests.
             </para>
@@ -340,7 +346,6 @@ url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
 
       <section id="s3-splunk_installation">
         <title>Splunk Installation</title>
-
         <para>
   	  The rest of the Splunk installation is handled by
           <filename>splunk_installation.sh</filename> installation script which is also
@@ -358,9 +363,9 @@ url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
           splunk rpm package from the URL specified in <filename>SPLUNK_URL</filename>
           variable and install it. This package can not be stored in my repository,
           because it's proprietary package and needs to be downloaded manually from the
-         <ulink url="http://www.splunk.com/download"/>.  It also creates startup
-         scripts, enables SSL, set initial password to 'xxxx' and add 514 TCP port to
-         Data inputs.
+          <ulink url="http://www.splunk.com/download"/>.  It also creates startup
+          scripts, enables SSL, set initial password to 'xxxx' and add 514 TCP port to
+          Data inputs.
         </para>
 
 <screen><command>sed -i.orig 's/^\(enableSplunkWebSSL\) = false/\1 = true/' /opt/splunk/etc/system/default/web.conf</command>
@@ -384,11 +389,13 @@ url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
         applies also for Glnace Guest installation, because both kickstart files are
         sharing the same <filename>ks_common_post.sh</filename>.
       </para>
+
       <para>
 	The only difference is - this kickstart also installs the EPEL (<ulink
         url="http://fedoraproject.org/wiki/EPEL"/>) repository and modifies the
         <package>rsyslog</package> to send the output to the remote IP using TCP:
       </para>
+
 <screen><command>rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm</command>
 <command>echo "*.* @@192.168.122.205" >> /etc/rsyslog.conf</command></screen>
     </section>
@@ -398,11 +405,14 @@ url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
       <para>
         The <package>openstack-glance</package> is part of the EPEL repository. We can use the default package installation using <package>yum</package> to install it directly.
       </para>
+
       <screen><command>yum install openstack-glance python-argparse -y</command></screen>
+
       <para>
 	The rest of the kickstart file is just updating the runlevels with
         glance startup scripts and modify it's configuration to log to rsyslog:
       </para>
+
 <screen><command>chkconfig openstack-glance-api on</command>
 <command>chkconfig openstack-glance-registry on</command>
 
@@ -417,6 +427,7 @@ url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
       of the logs. The logs should be the same when using the API or command line.
       (OpenStack is using the API). In the test I was using the following glance operations:
     </para>
+
     <itemizedlist>
       <listitem>
         <para>
@@ -449,24 +460,29 @@ url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
         </para>
       </listitem>
     </itemizedlist>
+
     <para>
       I wrote a short script located here: <ulink
       url="https://raw.github.com/ruzickap/splunk_glance/master/scripts/glance_log_tests.sh"/>
       to do all the tests mentioned above. It contains a simple loop with the
       operations mentioned above to generate all kind of logs.
     </para>
+
     <para>
       The main syslog messages are:
     </para>
+
 <screen>Processing request: POST /v1/images
 Processing request: GET /v1/images/detail
 Processing request: HEAD /v1/images/1
 Processing request: PUT /v1/images/1
 Processing request: DELETE /v1/images/1</screen>
+
     <para>
       After running the script mentioned above you should be able to see these
       messages in splunk:
     </para>
+
 <screen><command>splunk search 'sourcetype="syslog" host="centos6-glance" "Processing request:" | head 10'</command>
 Mar 16 19:05:26 centos6-glance 2012-03-16 19:05:26 DEBUG
 [glance.api.middleware.version_negotiation] Processing request: DELETE
@@ -495,6 +511,7 @@ Mar 16 19:05:20 centos6-glance 2012-03-16 19:05:20 DEBUG
 /v1/images/detail Accept:
 Mar 16 19:05:13 centos6-glance 2012-03-16 19:05:13 DEBUG [glance.api.middleware.version_negotiation] Processing request: POST /v1/images Accept:
 </screen>
+
     <para>
       The web interface is located on the url <ulink
       url="https://192.168.122.205:8000"/>, where you can also see the same messages.
