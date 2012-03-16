@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SPLUNK_URL="http://192.168.122.1/ks/splunk-4.3.1-119532-linux-2.6-x86_64.rpm"
+SPLUNK_URL="http://192.168.122.1/~pruzicka/ks/splunk-4.3.1-119532-linux-2.6-x86_64.rpm"
 SPLUNK_RPM=`basename $SPLUNK_URL`
 
 wget -P / $SPLUNK_URL

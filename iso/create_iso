@@ -2,5 +2,8 @@
 
 EXTRACTED_ISO_PATH="../../splunk/CentOS-6.2-x86_64-netinstall-my"
 NEW_ISO="CentOS-6.2-x86_64-netinstall-my.iso"
-rm -f $NEW_ISO
+rm -vf $NEW_ISO
+rm -rvf $EXTRACTED_ISO_PATH/ks
+mkdir -v $EXTRACTED_ISO_PATH/ks
+cp -v ../ks/centos62* $EXTRACTED_ISO_PATH/ks/
 mkisofs -o $NEW_ISO -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -v -follow-links $EXTRACTED_ISO_PATH
