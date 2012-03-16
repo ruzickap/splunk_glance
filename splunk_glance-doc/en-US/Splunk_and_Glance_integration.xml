@@ -118,9 +118,9 @@
       <para>
 	I was using KVM virtualization which is the default in most of the
         Linux distribution, because the <application>kvm</application> module is part
-        of the kernel. I used the dafault <application>libvirt</application> network
-        configuration, because there is no reason to split the virtual network - so
-        both virtual guests are connected <systemitem
+        of the kernel. I used the default <application>libvirt</application>
+        network configuration, because there is no reason to split the virtual
+        network - so both virtual guests are connected <systemitem
         class="ipaddress">192.168.122.0/24</systemitem>.
       </para>
       <important>
@@ -180,7 +180,7 @@
       <note>
         <title>Note</title>
         <para>
-  	  The full hostnames of the wirtual machines are:
+  	  The full hostnames of the virtual machines are:
           <literal>centos6-glance.example.com</literal> and
           <literal>centos6-splunk.example.com</literal>.
         </para>
@@ -217,7 +217,7 @@
     <section id="s2-network_topology">
       <title>Network Topology</title>
       <para>
-	You can find the Network diagram below.
+	You can find the network diagram below.
       </para>
 
       <figure float="0">
@@ -243,17 +243,18 @@
       <title>Note - Use already preconfigured CentOS image</title>
       <para>
 	I can recommend you to use preconfigured CentOS image, which can be
-        downloaded on this URL: 
-        <ulink url="http://raw.github.com/ruzickap/splunk_glance/master/iso/CentOS-6.2-x86_64-netinstall-my.iso"/>
+        downloaded on this URL:
+        <ulink url="https://raw.github.com/ruzickap/splunk_glance/master/iso/CentOS-6.2-x86_64-netinstall-my.iso"/>
       </para>
     </note>
 
     <para>
       If you will use the customized CentOS iso, you don't need to specify
-      manually the following kernel parameters:
+      manually the following kernel parameters and storing the kickstart files
+      somewhere on the web:
     </para>
 
-    <screen><userinput>ksdevice=eth0 ks=http://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance ip=192.168.122.200 netmask=255.255.255.0 gateway=192.168.122.1</userinput></screen>
+    <screen><userinput>ksdevice=eth0 ks=cdrom:/ks/centos62-glance ip=192.168.122.200 netmask=255.255.255.0 gateway=192.168.122.1</userinput></screen>
 
     <para>
       You will be able to select directly from the main menu what you want to install:
@@ -285,10 +286,11 @@
 
       <para>
         The installation of the Splunk Virtual Machine is done using the
-        kickstart file 
-        <ulink url="http://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>. 
+        kickstart file
+        <ulink
+url="https://raw.github.com/ruzickap/splunk_glance/master/ks/centos62-glance"/>.
       </para>
-       
+
       <section id="s3-splunk_installation_kickstart_section">
         <title>Splunk Guest Kickstart Installation</title>
         <para>
@@ -329,8 +331,8 @@
           <listitem>
   	  <para>
   	    <guilabel>SNMP configuration</guilabel> &mdash; to get the data about
-              cpu/memory/processes/traffic/disk IO,space from the machine out of the machine
-              using the standard SNMP requests.
+              cpu/memory/processes/traffic/disk IO, space from the machine out
+              of the machine using the standard SNMP requests.
             </para>
           </listitem>
         </itemizedlist>
@@ -342,30 +344,28 @@
         <para>
   	  The rest of the Splunk installation is handled by
           <filename>splunk_installation.sh</filename> installation script which is also
-          downloaded from the main repository. The kickstart file only conatin the
-          following path definitions:
+          downloaded from the main repository. The kickstart file only contain
+          the following path definitions:
         </para>
 
-        <screen><command>cat > /etc/profile.d/splunk.sh &lt;&lt; \EOF</command>
+<screen><command>cat > /etc/profile.d/splunk.sh &lt;&lt; \EOF</command>
 <command>export SPLUNK_HOME=/opt/splunk</command>
 <command>export PATH=$SPLUNK_HOME/bin:$PATH</command>
 <command>EOF</command></screen>
-      
+
         <para>
 	  <filename>splunk_installation.sh</filename> script downloads the
-          splunk rpm package from the given URL (<filename>SPLUNK_URL</filename>) and
-          install it. This package can not be stored in my repository, because it's
-          proprietary package and needs to be downloaded manually from the <ulink
-          url="http://www.splunk.com/download"/>.  It also creates startup scripts,
-          enables SSL, set initial password to 'xxxx' and add 514 TCP port to Data
-          imputs.
+          splunk rpm package from the URL specified in <filename>SPLUNK_URL</filename>
+          variable and install it. This package can not be stored in my repository,
+          because it's proprietary package and needs to be downloaded manually from the
+         <ulink url="http://www.splunk.com/download"/>.  It also creates startup
+         scripts, enables SSL, set initial password to 'xxxx' and add 514 TCP port to
+         Data inputs.
         </para>
 
-        <screen><command>sed -i.orig 's/^enableSplunkWebSSL = false/enableSplunkWebSSL = true/' /opt/splunk/etc/system/default/web.conf</command>
-
+<screen><command>sed -i.orig 's/^\(enableSplunkWebSSL\) = false/\1 = true/' /opt/splunk/etc/system/default/web.conf</command>
 <command>/opt/splunk/bin/splunk start --accept-license</command>
 <command>/opt/splunk/bin/splunk enable boot-start</command>
-
 <command>PASSWORD="xxxx"</command>
 <command>/opt/splunk/bin/splunk edit user admin -password $PASSWORD -role admin -auth admin:changeme</command>
 <command>/opt/splunk/bin/splunk add tcp 514 -sourcetype syslog -auth admin:$PASSWORD</command></screen>
@@ -389,7 +389,7 @@
         url="http://fedoraproject.org/wiki/EPEL"/>) repository and modifies the
         <package>rsyslog</package> to send the output to the remote IP using TCP:
       </para>
-      <screen><command>rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm</command>
+<screen><command>rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm</command>
 <command>echo "*.* @@192.168.122.205" >> /etc/rsyslog.conf</command></screen>
     </section>
 
@@ -403,7 +403,7 @@
 	The rest of the kickstart file is just updating the runlevels with
         glance startup scripts and modify it's configuration to log to rsyslog:
       </para>
-      <screen><command>chkconfig openstack-glance-api on</command>
+<screen><command>chkconfig openstack-glance-api on</command>
 <command>chkconfig openstack-glance-registry on</command>
 
 <command>sed -i.orig 's/^use_syslog = False/use_syslog = True/' /etc/glance/glance-*.conf</command></screen>
@@ -411,50 +411,128 @@
   </section>
 
   <section id="s1-tests">
-      <title>Tests</title>
-      <para>
-	I decided to simulate most common glance operations to see the output
-        of the logs. The logs should be the same when using the API or command line.
-        (OpenStack is using the API). In the test I was using the following glance operations:
-      </para>
-      <itemizedlist>
-        <listitem>
-	  <para>
-            <guilabel>add</guilabel> &mdash; adds a new image to Glance.
-          </para>
-        </listitem>
-        <listitem>
-	  <para>
-            <guilabel>update</guilabel> &mdash; updates an image's metadata in Glance
-          </para>
-        </listitem>
-        <listitem>
-	  <para>
-            <guilabel>delete</guilabel> &mdash; deletes an image from Glance
-          </para>
-        </listitem>
-        <listitem>
-	  <para>
-            <guilabel>index</guilabel> &mdash; return brief information about images in Glance.
-          </para>
-        </listitem>
-        <listitem>
-	  <para>
-            <guilabel>details</guilabel> &mdash; return detailed information about images in Glance.
-          </para>
-        </listitem>
-        <listitem>
-	  <para>
-            <guilabel>show</guilabel> &mdash; show detailed information about an image in Glance.
-          </para>
-        </listitem>
-      </itemizedlist>
-      <para>
-	I wrote a short script located here: <ulink
-        url="http://raw.github.com/ruzickap/splunk_glance/master/scripts/glance_log_tests.sh"/>
-        to do all the tests mentioned above.
-      </para>
+    <title>Tests</title>
+    <para>
+      I decided to simulate most common glance operations to see the output
+      of the logs. The logs should be the same when using the API or command line.
+      (OpenStack is using the API). In the test I was using the following glance operations:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <guilabel>add</guilabel> &mdash; adds a new image to Glance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <guilabel>update</guilabel> &mdash; updates an image's metadata in Glance
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <guilabel>delete</guilabel> &mdash; deletes an image from Glance
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <guilabel>index</guilabel> &mdash; return brief information about images in Glance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <guilabel>details</guilabel> &mdash; return detailed information about images in Glance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <guilabel>show</guilabel> &mdash; show detailed information about an image in Glance.
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      I wrote a short script located here: <ulink
+      url="https://raw.github.com/ruzickap/splunk_glance/master/scripts/glance_log_tests.sh"/>
+      to do all the tests mentioned above. It contains a simple loop with the
+      operations mentioned above to generate all kind of logs.
+    </para>
+    <para>
+      The main syslog messages are:
+    </para>
+<screen>Processing request: POST /v1/images
+Processing request: GET /v1/images/detail
+Processing request: HEAD /v1/images/1
+Processing request: PUT /v1/images/1
+Processing request: DELETE /v1/images/1</screen>
+    <para>
+      After running the script mentioned above you should be able to see these
+      messages in splunk:
+    </para>
+<screen><command>splunk search 'sourcetype="syslog" host="centos6-glance" "Processing request:" | head 10'</command>
+Mar 16 19:05:26 centos6-glance 2012-03-16 19:05:26 DEBUG
+[glance.api.middleware.version_negotiation] Processing request: DELETE
+/v1/images/20 Accept:
+Mar 16 19:05:23 centos6-glance 2012-03-16 19:05:23 DEBUG [glance.api.middleware.version_negotiation] Processing request: GET /v1/images/20 Accept: */*
+Mar 16 19:05:23 centos6-glance 2012-03-16 19:05:23 DEBUG
+[glance.api.middleware.version_negotiation] Processing request: PUT
+/v1/images/20 Accept:
+Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG
+[glance.api.middleware.version_negotiation] Processing request: PUT
+/v1/images/20 Accept:
+Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG
+[glance.api.middleware.version_negotiation] Processing request: GET /v1/images
+Accept:
+Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG
+[glance.api.middleware.version_negotiation] Processing request: GET /v1/images
+Accept:
+Mar 16 19:05:21 centos6-glance 2012-03-16 19:05:21 DEBUG
+[glance.api.middleware.version_negotiation] Processing request: HEAD
+/v1/images/20 Accept:
+Mar 16 19:05:20 centos6-glance 2012-03-16 19:05:20 DEBUG
+[glance.api.middleware.version_negotiation] Processing request: GET
+/v1/images/detail Accept:
+Mar 16 19:05:20 centos6-glance 2012-03-16 19:05:20 DEBUG
+[glance.api.middleware.version_negotiation] Processing request: GET
+/v1/images/detail Accept:
+Mar 16 19:05:13 centos6-glance 2012-03-16 19:05:13 DEBUG [glance.api.middleware.version_negotiation] Processing request: POST /v1/images Accept:
+</screen>
+    <para>
+      The web interface is located on the url <ulink
+      url="https://192.168.122.205:8000"/>, where you can also see the same messages.
+    </para>
   </section>
 
+  <section id="s1-summary">
+    <title>Summary</title>
+    <para>
+      I was working with Splunk for a short time, but I can imagine it's
+      function as a central syslog server through which users can esaily look for
+      information in prepared searches. It's reporting capabilities seems to be very
+      handy and nice prepared AJAX-enabled web interface. It was also quite
+      interesting to see the data changes in real time. The alerting functions looks
+      promising and I shouldn't forget to mention the possibility to extend the
+      main part with various "log reporting applications". The installation was
+      very easy and configuration as well.
+    </para>
+
+    <para>
+      On the other hand is the price, which is quite high for small companies.
+      The licensing is based on indexed data per day, where price starts at
+      $6000 for a 500 megabyte-per-day including support.
+      The design of documentation should be improved, but it contains the
+      important stuff.
+      I'm sure there are few opensource software (like <ulink url="http://www.graylog2.org/">Graylog2</ulink>), which can be a
+      good solution for the small companies as well as other commercial
+      competitors like <ulink url="http://www.loglogic.com/">LogLogic</ulink>,
+      <ulink url="http://www.logrhythm.com/">LogRhythm</ulink>, <ulink
+      url="http://www.liquidlabs.com/">LogScape</ulink> and many others.
+    </para>
+
+    <para>
+      There are many things which I haven't touched, but I just want to show
+      basic capabilities of this powerful software. For the companies who are
+      taking the log analysis seriously, this can be the right tool. The others
+      can use some cheaper variants.
+    </para>
+  </section>
   <xi:include href="Revision_History.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </article>
