@@ -8,7 +8,7 @@
 	<simpara>
 		<revhistory>
 			<revision>
-				<revnumber>0-0</revnumber>
+				<revnumber>0-1</revnumber>
 				<date>Sun Mar 11 2012</date>
 				<author>
 					<firstname>Petr</firstname>
@@ -17,7 +17,7 @@
 				</author>
 				<revdescription>
 					<simplelist>
-						<member>Initial creation of book by publican</member>
+						<member>Initial creation of article</member>
 					</simplelist>
 				</revdescription>
 			</revision>
