@@ -23,5 +23,3 @@ PASSWORD="xxxx"
 /opt/splunk/bin/splunk add tcp 514 -sourcetype syslog -auth admin:$PASSWORD
 #Disable password change request
 touch /opt/splunk/etc/.ui_login
-
-#splunk search 'sourcetype="syslog" host="centos6-glance" "Processing request: POST"'
