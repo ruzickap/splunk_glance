@@ -13,8 +13,8 @@ fi
 ## Splunk
 rpm -Uvh /$SPLUNK_RPM
 #Enable SSL
-sed -i.orig 's/^enableSplunkWebSSL = false/enableSplunkWebSSL = true/' /opt/splunk/etc/system/default/web.conf
-
+#sed -i.orig 's/^enableSplunkWebSSL = false/enableSplunkWebSSL = true/' /opt/splunk/etc/system/default/web.conf
+sed -i.orig 's/^\(enableSplunkWebSSL\) = false/\1 = true/' /opt/splunk/etc/system/default/web.conf
 /opt/splunk/bin/splunk start --accept-license
 /opt/splunk/bin/splunk enable boot-start
 
