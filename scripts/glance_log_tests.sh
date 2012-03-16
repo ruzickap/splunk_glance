@@ -1,17 +1,17 @@
 #!/bin/bash 
 
-if [ ! -d /var/tmp/isos ]; then
-  mkdir /var/tmp/isos
-  #wget http://ftp.sh.cvut.cz/MIRRORS/centos/6.2/isos/x86_64/CentOS-6.2-x86_64-netinstall.iso
-  wget -P /var/tmp/isos/ http://192.168.122.1/ks/CentOS-6.2-x86_64-netinstall.iso
-  #wget http://people.debian.org/~aurel32/qemu/amd64/debian_lenny_amd64_standard.qcow2
-  wget -P /var/tmp/isos/ http://192.168.122.1/ks/debian_lenny_amd64_standard.qcow2
+IMAGE_PATH="/var/tmp/images"
+
+if [ ! -d $IMAGE_PATH ]; then
+  mkdir $IMAGE_PATH
+  wget -P $IMAGE_PATH http://ftp.sh.cvut.cz/MIRRORS/centos/6.2/isos/x86_64/CentOS-6.2-x86_64-netinstall.iso
+# wget -P $IMAGE_PATH http://people.debian.org/~aurel32/qemu/amd64/debian_lenny_amd64_standard.qcow2
 fi
 
 (
 set -x
 COUNTER=0
-for IMAGE in /var/tmp/isos/CentOS-6.2-x86_64-netinstall.iso /var/tmp/isos/debian_lenny_amd64_standard.qcow2; do
+for IMAGE in $IMAGE_PATH/*; do
   for I in `seq -s " " 10`; do
     COUNTER=$((COUNTER+1))
     echo "*** $IMAGE: $I / $COUNTER"
