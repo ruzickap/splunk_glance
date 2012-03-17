@@ -1,4 +1,4 @@
 #!/bin/bash
 
 publican build --formats=pdf,html-single,html-desktop --langs en-US && \
-okular --page 8 ./publican/en-US/pdf/Splunk_and_Glance-0.1-Splunk_and_Glance_integration-en-US.pdf
+okular --page 1 ./publican/en-US/pdf/Splunk_and_Glance-0.1-Splunk_and_Glance_integration-en-US.pdf

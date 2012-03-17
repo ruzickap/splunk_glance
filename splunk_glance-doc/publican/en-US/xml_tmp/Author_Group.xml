@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE authorgroup PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "splunk_glance-doc.ent">
+%BOOK_ENTITIES;
+]>
+<authorgroup>
+	<author>
+		<firstname>Petr</firstname>
+		<surname>Růžička</surname>
+		<affiliation>
+			<orgname>MyOrg</orgname>
+			<orgdiv>IT</orgdiv>
+		</affiliation>
+		<email>petr.ruzicka@gmail.com</email>
+	</author>
+</authorgroup>
+
