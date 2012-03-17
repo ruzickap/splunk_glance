@@ -11,22 +11,22 @@
     <para>
       I would like to describe the integration between Glance(<ulink
       url="http://glance.openstack.org/"/>) and Splunk (<ulink
-      url="http://www.splunk.com/"/>)
+      url="http://www.splunk.com/"/>).
     </para>
 
     <itemizedlist>
       <listitem>
 	<para>
 	  <guilabel>Glance</guilabel> provides services used by OpenStack
-          project for discovering, registering, and retrieving virtual machine images. It
-          has it's API, which can be used by programming languages and also CLI.
+          project for discovering, registering, and retrieving disk images. For this purpose it
+          has it's own API, which can be used by programming languages and also CLI.
         </para>
       </listitem>
       <listitem>
 	<para>
 	  <guilabel>Splunk</guilabel> is a software used for collecting, indexing from various sources
           which can be analysed. Splunk has web-gui through which you can easily display
-          graphs, statistics of collected data.
+          graphs, statistics and reports of collected data.
         </para>
       </listitem>
     </itemizedlist>
@@ -34,11 +34,12 @@
     <para>
       The goal of this document is to show possibilities how the logs generated
       by Glance can be transferred and indexed by Splunk. The suggested solution is
-      just a simple example how to do it. It doesn't conatin any kind of redundancy
-      (except bonding configuration). Fully redundant solution will probably include
-      forwarders, <package>keepalived</package> and more advanced stuff - but this is
-      not a goal of this project.  You can find the necessary files and sources in
-      the repository: <ulink url="https://github.com/ruzickap/splunk_glance"/>.
+      just a simple example how to do it. It doesn't describe any kind of redundancy
+      (except bonding configuration) or high avaiablility. Fully redundant solution
+      will probably include forwarders, <package>keepalived</package> and more
+      advanced stuff - but this is not a goal of this project.  You can find the
+      necessary files and sources in the repository: <ulink
+      url="https://github.com/ruzickap/splunk_glance"/>.
     </para>
   </section>
 
@@ -46,9 +47,9 @@
     <title>Reference Architecture Configuration</title>
     <para>
       For the simulations I decided to use free software as much as possible
-      and visualised hardware. It's not a priority right now to describe in details
-      which hardware is needed for real production, because this is suggestions how
-      the things can work. It's the same with software – for production server it's
+      and virtualized hardware. It's not a priority to describe in details
+      which hardware is needed for real production, because this is just suggestion how
+      it can work. It's the same with software – for production server it's
       better to buy supported OS from known vendors, but it depends how big the final
       solution.
     </para>
@@ -59,8 +60,8 @@
         <title>Operating Systems</title>
 	<para>
 	  I choose CentOS (<ulink url="http://www.centos.org"/>) as the
-          operating system for the whole solution. It's 64-bit version OS based on Red
-          Hat Enterprise Linux. The advantage of this choice is - CentOS is binary
+          operating system for the servers. It's 64-bit version OS based on Red
+          Hat Enterprise Linux. The advantage of this choice - the CentOS is binary
           compatible with RHEL. If it will be necessary to move the applications to the
           RHEL it can be done quite easily.
         </para>
@@ -104,17 +105,19 @@
 
     <section id="s3-hardware_configuration">
       <title>Hardware Configuration</title>
-      <para>There only hardware I used was my laptop with virtualization.
-        This was sufficient for the basics tests.
+      <para>
+        There only hardware I used was my laptop with virtualization.  It was
+        sufficient for the basics tests.
       </para>
     </section>
   </section>
   <section id="s1-environment">
     <title>Environment</title>
-    <para>As I mentioned before, the project should describe the
-      possibilities of logging glance logs to the splunk. For this purpose I
+    <para>
+      As I mentioned before, the project should describe the
+      possibilities of logging Glance logs to the Splunk. For this purpose I
       used 2 virtual machines, where Fedora 16 (<ulink
-      url="http://www.fedora.org"/>) was the host and CentOS 6.2 were two
+      url="http://fedoraproject.org/"/>) was the host and CentOS 6.2 were two
       guests.
     </para>
     <section id="s2-virtual_host_configuration">
@@ -360,7 +363,7 @@
 
         <para>
 	  <filename>splunk_installation.sh</filename> script downloads the
-          splunk rpm package from the URL specified in <filename>SPLUNK_URL</filename>
+          Splunk's rpm package from the URL specified in <filename>SPLUNK_URL</filename>
           variable and install it. This package can not be stored in my repository,
           because it's proprietary package and needs to be downloaded manually from the
           <ulink url="http://www.splunk.com/download"/>.  It also creates startup
@@ -398,34 +401,36 @@
 
 <screen><command>rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm</command>
 <command>echo "*.* @@192.168.122.205" >> /etc/rsyslog.conf</command></screen>
-    </section>
 
-    <section id="s2-glance_installation">
-      <title>Glance Installation</title>
-      <para>
-        The <package>openstack-glance</package> is part of the EPEL repository. We can use the default package installation using <package>yum</package> to install it directly.
-      </para>
+      <section id="s3-glance_installation">
+        <title>Glance Installation</title>
+        <para>
+	  The <package>openstack-glance</package> is part of the EPEL
+          repository. We can use the default package installation using
+          <package>yum</package> to install it directly.
+        </para>
 
-      <screen><command>yum install openstack-glance python-argparse -y</command></screen>
+        <screen><command>yum install openstack-glance python-argparse -y</command></screen>
 
-      <para>
-	The rest of the kickstart file is just updating the runlevels with
-        glance startup scripts and modify it's configuration to log to rsyslog:
-      </para>
+        <para>
+  	  The rest of the kickstart file is just updating the runlevels with
+          Glance startup scripts and modify it's configuration to log to rsyslog:
+        </para>
 
 <screen><command>chkconfig openstack-glance-api on</command>
 <command>chkconfig openstack-glance-registry on</command>
 
 <command>sed -i.orig 's/^use_syslog = False/use_syslog = True/' /etc/glance/glance-*.conf</command></screen>
+      </section>
     </section>
   </section>
 
   <section id="s1-tests">
     <title>Tests</title>
     <para>
-      I decided to simulate most common glance operations to see the output
+      I decided to simulate most common Glance operations to see the output
       of the logs. The logs should be the same when using the API or command line.
-      (OpenStack is using the API). In the test I was using the following glance operations:
+      (OpenStack is using the API). In the test I was using the following Glance operations:
     </para>
 
     <itemizedlist>
@@ -480,35 +485,19 @@ Processing request: DELETE /v1/images/1</screen>
 
     <para>
       After running the script mentioned above you should be able to see these
-      messages in splunk:
+      messages in Splunk:
     </para>
 
 <screen><command>splunk search 'sourcetype="syslog" host="centos6-glance" "Processing request:" | head 10'</command>
-Mar 16 19:05:26 centos6-glance 2012-03-16 19:05:26 DEBUG
-[glance.api.middleware.version_negotiation] Processing request: DELETE
-/v1/images/20 Accept:
+Mar 16 19:05:26 centos6-glance 2012-03-16 19:05:26 DEBUG [glance.api.middleware.version_negotiation] Processing request: DELETE /v1/images/20 Accept:
 Mar 16 19:05:23 centos6-glance 2012-03-16 19:05:23 DEBUG [glance.api.middleware.version_negotiation] Processing request: GET /v1/images/20 Accept: */*
-Mar 16 19:05:23 centos6-glance 2012-03-16 19:05:23 DEBUG
-[glance.api.middleware.version_negotiation] Processing request: PUT
-/v1/images/20 Accept:
-Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG
-[glance.api.middleware.version_negotiation] Processing request: PUT
-/v1/images/20 Accept:
-Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG
-[glance.api.middleware.version_negotiation] Processing request: GET /v1/images
-Accept:
-Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG
-[glance.api.middleware.version_negotiation] Processing request: GET /v1/images
-Accept:
-Mar 16 19:05:21 centos6-glance 2012-03-16 19:05:21 DEBUG
-[glance.api.middleware.version_negotiation] Processing request: HEAD
-/v1/images/20 Accept:
-Mar 16 19:05:20 centos6-glance 2012-03-16 19:05:20 DEBUG
-[glance.api.middleware.version_negotiation] Processing request: GET
-/v1/images/detail Accept:
-Mar 16 19:05:20 centos6-glance 2012-03-16 19:05:20 DEBUG
-[glance.api.middleware.version_negotiation] Processing request: GET
-/v1/images/detail Accept:
+Mar 16 19:05:23 centos6-glance 2012-03-16 19:05:23 DEBUG [glance.api.middleware.version_negotiation] Processing request: PUT /v1/images/20 Accept:
+Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG [glance.api.middleware.version_negotiation] Processing request: PUT /v1/images/20 Accept:
+Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG [glance.api.middleware.version_negotiation] Processing request: GET /v1/images Accept:
+Mar 16 19:05:22 centos6-glance 2012-03-16 19:05:22 DEBUG [glance.api.middleware.version_negotiation] Processing request: GET /v1/images Accept:
+Mar 16 19:05:21 centos6-glance 2012-03-16 19:05:21 DEBUG [glance.api.middleware.version_negotiation] Processing request: HEAD /v1/images/20 Accept:
+Mar 16 19:05:20 centos6-glance 2012-03-16 19:05:20 DEBUG [glance.api.middleware.version_negotiation] Processing request: GET /v1/images/detail Accept:
+Mar 16 19:05:20 centos6-glance 2012-03-16 19:05:20 DEBUG [glance.api.middleware.version_negotiation] Processing request: GET /v1/images/detail Accept:
 Mar 16 19:05:13 centos6-glance 2012-03-16 19:05:13 DEBUG [glance.api.middleware.version_negotiation] Processing request: POST /v1/images Accept:
 </screen>
 
