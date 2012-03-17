@@ -35,7 +35,7 @@
       The goal of this document is to show possibilities how the logs generated
       by Glance can be transferred and indexed by Splunk. The suggested solution is
       just a simple example how to do it. It doesn't describe any kind of redundancy
-      (except bonding configuration) or high avaiablility. Fully redundant solution
+      (except bonding configuration) or high availability. Fully redundant solution
       will probably include forwarders, <package>keepalived</package> and more
       advanced stuff - but this is not a goal of this project.  You can find the
       necessary files and sources in the repository: <ulink
@@ -116,7 +116,7 @@
     <para>
       As I mentioned before, the project should describe the
       possibilities of logging Glance logs to the Splunk. For this purpose I
-      used 2 virtual machines, where Fedora 16 (<ulink
+      used 2 virtual machines where Fedora 16 (<ulink
       url="http://fedoraproject.org/"/>) was the host and CentOS 6.2 were two
       guests.
     </para>
@@ -226,7 +226,7 @@
     <section id="s2-network_topology">
       <title>Network Topology</title>
       <para>
-	You can find the network diagram below.
+	Find the network diagram below.
       </para>
 
       <figure float="0">
@@ -253,14 +253,14 @@
       <title>Note - Use already preconfigured CentOS image</title>
       <para>
 	I can recommend you to use preconfigured CentOS image, which can be
-        downloaded on this URL:
+        downloaded here:
         <ulink url="https://raw.github.com/ruzickap/splunk_glance/master/iso/CentOS-6.2-x86_64-netinstall-my.iso"/>
       </para>
     </note>
 
     <para>
       If you will use the customized CentOS iso, you don't need to specify
-      manually the following kernel parameters and storing the kickstart files
+      manually the kernel parameters or storing the kickstart files
       somewhere on the web:
     </para>
 
@@ -280,9 +280,9 @@
     </figure>
 
     <para>
-      The files necessary to build the iso <filename>isolinux.cfg</filename>
+      The files necessary to build the iso - <filename>isolinux.cfg</filename>
       and <filename>create_iso</filename> are located in the same directory as the
-      ISO file above.
+      iso image above.
     </para>
 
     <para>
@@ -306,14 +306,14 @@
           First part of the kickstart file contains basic installation, which will
           configure first network interface <systemitem>eth0</systemitem> and download
           the rest of the system form the Czech CentOS mirror. It will automatically
-          remove all partitions on the disk, configure timezone and disable SELinux and
-          firewall.
+          remove all partitions on the disk, configure time zone and disable
+          SELinux and firewall.
         </para>
 
         <para>
   	  The second part contains the installation of basic packages and setting
           the server defaults using <filename>ks_common_post.sh</filename>. This file is
-          included in the main kickstart using <command>%include</command> and contains:
+          included in the main kickstart using <command>%include</command> parameter and contains:
         </para>
 
         <itemizedlist>
@@ -353,7 +353,7 @@
   	  The rest of the Splunk installation is handled by
           <filename>splunk_installation.sh</filename> installation script which is also
           downloaded from the main repository. The kickstart file only contain
-          the following path definitions:
+          the following PATH definitions:
         </para>
 
 <screen><command>cat > /etc/profile.d/splunk.sh &lt;&lt; \EOF</command>
@@ -364,7 +364,7 @@
         <para>
 	  <filename>splunk_installation.sh</filename> script downloads the
           Splunk's rpm package from the URL specified in <filename>SPLUNK_URL</filename>
-          variable and install it. This package can not be stored in my repository,
+          variable and install it. This package can not be stored in repository,
           because it's proprietary package and needs to be downloaded manually from the
           <ulink url="http://www.splunk.com/download"/>.  It also creates startup
           scripts, enables SSL, set initial password to 'xxxx' and add 514 TCP port to
@@ -372,8 +372,10 @@
         </para>
 
 <screen><command>sed -i.orig 's/^\(enableSplunkWebSSL\) = false/\1 = true/' /opt/splunk/etc/system/default/web.conf</command>
+
 <command>/opt/splunk/bin/splunk start --accept-license</command>
 <command>/opt/splunk/bin/splunk enable boot-start</command>
+
 <command>PASSWORD="xxxx"</command>
 <command>/opt/splunk/bin/splunk edit user admin -password $PASSWORD -role admin -auth admin:changeme</command>
 <command>/opt/splunk/bin/splunk add tcp 514 -sourcetype syslog -auth admin:$PASSWORD</command></screen>
@@ -387,7 +389,7 @@
     <section id="s2-glance_virtual_guest_installation">
       <title>Glance Virtual Guest Installation</title>
       <para>
-	The installation of Glance Virtual Guest is quite simmilar to the
+	The installation of Glance Virtual Guest is quite similar to the
         previous one. The <xref linkend="s3-splunk_installation_kickstart_section"/>
         applies also for Glnace Guest installation, because both kickstart files are
         sharing the same <filename>ks_common_post.sh</filename>.
@@ -396,7 +398,7 @@
       <para>
 	The only difference is - this kickstart also installs the EPEL (<ulink
         url="http://fedoraproject.org/wiki/EPEL"/>) repository and modifies the
-        <package>rsyslog</package> to send the output to the remote IP using TCP:
+        <package>rsyslog</package> to send the output to the remote IP using TCP protocol:
       </para>
 
 <screen><command>rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm</command>
@@ -406,15 +408,15 @@
         <title>Glance Installation</title>
         <para>
 	  The <package>openstack-glance</package> is part of the EPEL
-          repository. We can use the default package installation using
-          <package>yum</package> to install it directly.
+          repository and the installation is done using
+          <package>yum</package>.
         </para>
 
         <screen><command>yum install openstack-glance python-argparse -y</command></screen>
 
         <para>
   	  The rest of the kickstart file is just updating the runlevels with
-          Glance startup scripts and modify it's configuration to log to rsyslog:
+          Glance startup scripts and modify default logging to rsyslog:
         </para>
 
 <screen><command>chkconfig openstack-glance-api on</command>
@@ -429,7 +431,7 @@
     <title>Tests</title>
     <para>
       I decided to simulate most common Glance operations to see the output
-      of the logs. The logs should be the same when using the API or command line.
+      of the logs. The logs should be the same when using the API or command line
       (OpenStack is using the API). In the test I was using the following Glance operations:
     </para>
 
@@ -470,7 +472,7 @@
       I wrote a short script located here: <ulink
       url="https://raw.github.com/ruzickap/splunk_glance/master/scripts/glance_log_tests.sh"/>
       to do all the tests mentioned above. It contains a simple loop with the
-      operations mentioned above to generate all kind of logs.
+      operations mentioned above to generate all kinds of logs.
     </para>
 
     <para>
@@ -502,8 +504,8 @@ Mar 16 19:05:13 centos6-glance 2012-03-16 19:05:13 DEBUG [glance.api.middleware.
 </screen>
 
     <para>
-      The web interface is located on the url <ulink
-      url="https://192.168.122.205:8000"/>, where you can also see the same messages.
+      The web interface is located on the url: <ulink
+      url="https://192.168.122.205:8000"/>, where you can see the same messages as well.
     </para>
   </section>
 
@@ -511,9 +513,9 @@ Mar 16 19:05:13 centos6-glance 2012-03-16 19:05:13 DEBUG [glance.api.middleware.
     <title>Summary</title>
     <para>
       I was working with Splunk for a short time, but I can imagine it's
-      function as a central syslog server through which users can esaily look for
-      information in prepared searches. It's reporting capabilities seems to be very
-      handy and nice prepared AJAX-enabled web interface. It was also quite
+      function as a central syslog server through which users can easily look for
+      information in predefined searches. It's reporting capabilities seems to be very
+      handy and nice prepared in AJAX-enabled web interface. It was also quite
       interesting to see the data changes in real time. The alerting functions looks
       promising and I shouldn't forget to mention the possibility to extend the
       main part with various "log reporting applications". The installation was
@@ -530,14 +532,14 @@ Mar 16 19:05:13 centos6-glance 2012-03-16 19:05:13 DEBUG [glance.api.middleware.
       good solution for the small companies as well as other commercial
       competitors like <ulink url="http://www.loglogic.com/">LogLogic</ulink>,
       <ulink url="http://www.logrhythm.com/">LogRhythm</ulink>, <ulink
-      url="http://www.liquidlabs.com/">LogScape</ulink> and many others.
+      url="http://www.liquidlabs.com/">LogScape</ulink>, etc.
     </para>
 
     <para>
       There are many things which I haven't touched, but I just want to show
       basic capabilities of this powerful software. For the companies who are
       taking the log analysis seriously, this can be the right tool. The others
-      can use some cheaper variants.
+      can use some cheaper (or free) variants.
     </para>
   </section>
   <xi:include href="Revision_History.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
